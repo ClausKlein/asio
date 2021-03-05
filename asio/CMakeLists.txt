@@ -21,7 +21,7 @@ else()
   endif()
 
   # ========================================
-  project(asio VERSION 1.14.1 LANGUAGES CXX)
+  project(asio VERSION 1.18.0 LANGUAGES CXX)
   # ========================================
 
 endif()

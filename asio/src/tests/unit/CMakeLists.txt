@@ -34,6 +34,30 @@ set(test_PROGRAMS
   detached
   dispatch
   error
+  execution/any_executor
+  execution/blocking
+  execution/blocking_adaptation
+  execution/bulk_execute
+  execution/bulk_guarantee
+  execution/connect
+  execution/context_as
+  execution/execute
+  execution/executor
+  execution/invocable_archetype
+  execution/mapping
+  execution/operation_state
+  execution/outstanding_work
+  execution/prefer_only
+  execution/receiver
+  execution/relationship
+  execution/schedule
+  execution/scheduler
+  execution/sender
+  execution/set_done
+  execution/set_error
+  execution/set_value
+  execution/start
+  execution/submit
   execution_context
   executor
   executor_work_guard
@@ -89,6 +113,7 @@ set(test_PROGRAMS
   serial_port_base
   signal_set
   socket_base
+  static_thread_pool
   steady_timer
   strand
   streambuf
@@ -97,6 +122,7 @@ set(test_PROGRAMS
   system_timer
   this_coro
   thread
+  thread_pool
   time_traits
   ts/buffer
   ts/executor
@@ -135,6 +161,7 @@ if(OpenSSL_FOUND)
     ssl/context_base
     ssl/context
     ssl/error
+    ssl/host_name_verification
     ssl/rfc2818_verification
     ssl/stream_base
     ssl/stream

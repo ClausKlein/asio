@@ -20,6 +20,7 @@ set(noinst_PROGRAMS
   fork/daemon.cpp
   fork/process_per_connection.cpp
   futures/daytime_client.cpp
+  handler_tracking/async_tcp_echo_server.cpp
   invocation/prioritised_handlers.cpp
   iostreams/http_client.cpp
   local/connect_pair.cpp

@@ -5,7 +5,7 @@ from conans import ConanFile, CMake, tools
 
 class AsioConan(ConanFile):
     name = "asio"
-    version = "1.12.1"
+    version = "1.18.0"
     license = "Boost Software License - Version 1.0"
     url = "https://github.com/chriskohlhoff/asio/issues"
     description = "Asio C++ Library"
@@ -20,7 +20,7 @@ class AsioConan(ConanFile):
 shared=False
 header_only=True
 force_openssl=True
-cxx_14=True
+cxx_17=True
 '''
     generators = "cmake"
     exports_sources = "../asio/*"
