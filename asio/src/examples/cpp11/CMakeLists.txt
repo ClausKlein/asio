@@ -75,7 +75,7 @@ set(http_server_http_server_SOURCES
 foreach(program ${noinst_PROGRAMS})
   string(REPLACE "/" "_" target ${program})
   if(NOT DEFINED "${target}_SOURCES")
-    set("${target}_SOURCES" ${program})
+    set("${target}_SOURCES" ${program}.cpp)
   endif()
   add_executable(${target_prefix}${target} ${${target}_SOURCES})
   set_target_properties(${target_prefix}${target} PROPERTIES CXX_STANDARD 11)

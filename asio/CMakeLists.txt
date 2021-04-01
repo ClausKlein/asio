@@ -1,5 +1,5 @@
 # Minimum supported CMake version
-cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.13...3.20)
 
 if(CONAN_COMPILER)
 
@@ -26,9 +26,9 @@ else()
 
 endif()
 
-#----------------------------------------------------------
+# =========================================================
 # Compiler config
-#----------------------------------------------------------
+# =========================================================
 if(NOT DEFINED CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -38,12 +38,23 @@ message(STATUS "USING: CMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}")
 message(STATUS "USING: CMAKE_CXX_STANDARD_REQUIRED=${CMAKE_CXX_STANDARD_REQUIRED}")
 message(STATUS "USING: CMAKE_CXX_EXTENSIONS=${CMAKE_CXX_EXTENSIONS}")
 
+# =========================================================
+# Check if asio is being used directly or via add_subdirectory,
+# but allow overriding
+# =========================================================
+if(NOT DEFINED ASIO_MASTER_PROJECT)
+    if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+        set(ASIO_MASTER_PROJECT ON)
+    else()
+        set(ASIO_MASTER_PROJECT OFF)
+    endif()
+endif()
 
 ###########################################################
 option(ASIO_STANDALONE "Build asio without boost" ON)
 ###########################################################
 if(ASIO_STANDALONE)
-  option(COMPILER_WARNINGS_ARE_ERRORS "To be pedantic! ;-)" ON)
+  option(COMPILER_WARNINGS_ARE_ERRORS "To be pedantic! ;-)" ${ASIO_MASTER_PROJECT})
   if(COMPILER_WARNINGS_ARE_ERRORS)
     if(MSVC)
       # warning level 4 and all warnings as errors
@@ -58,18 +69,16 @@ else()
 endif()
 ###########################################################
 
-
 # =========================================================
-# ASIO Options
-#==========================================================
+# other ASIO Options
+# =========================================================
 option(ASIO_NO_DEPRECATED "Build asio without deprecated interfaces" ON)
-option(ASIO_BUILD_TESTS "Build asio unittest too" ${ASIO_STANDALONE})
-option(ASIO_BUILD_EXAMPLES "Build asio examples too" ${ASIO_STANDALONE})
+option(ASIO_BUILD_TESTS "Build asio unittest too" ${ASIO_MASTER_PROJECT})
+option(ASIO_BUILD_EXAMPLES "Build asio examples too" ${ASIO_MASTER_PROJECT})
 option(ASIO_ENABLE_HANDLER_TRACKING "enable handler tracking" OFF)
 option(ASIO_DISABLE_KQUEUE "disable kqueue" OFF)
 option(ASIO_DISABLE_EPOLL "disable epoll" OFF)
 option(ASIO_USE_CLANG_TIDY "use clang-tidy if found" OFF)
-
 
 #
 # Where to put all the RUNTIME targets when built.  This variable is used
@@ -134,9 +143,6 @@ if(NOT CONAN_COMPILER)
     option(Boost_USE_MULTITHREADED "Set to OFF to use the non-multithreaded" ON)
     option(Boost_DEBUG "Set to ON to enable debug output from FindBoost." OFF)
     option(Boost_DETAILED_FAILURE_MSG "Set to ON to get detailed information" ON)
-    # Set Boost_NO_BOOST_CMAKE to ON to disable the search for boost-cmake.
-    set(Boost_NO_BOOST_CMAKE ON)
-    set(BOOST_ROOT "/usr/local" CACHE PATH "path to the boost lib")
     set(Boost_USE_STATIC_LIBS OFF)
     if(WIN32)
       set(Boost_USE_STATIC_RUNTIME OFF)
@@ -169,16 +175,6 @@ if(NOT CONAN_COMPILER)
     message(STATUS "HAVE_OPENSSL")
     list(APPEND CPPdefinitions HAVE_OPENSSL)
     include_directories(BEFORE ${openSSL_INCLUDE_DIR})
-  # else()
-  #   find_library(OpenSSL_LIBRARY ssl HINTS ${OpenSSL_ROOT_DIR}/lib)
-  #   find_library(CRYPTO_LIBRARY crypto HINTS ${OpenSSL_ROOT_DIR}/lib)
-  #   if(OpenSSL_LIBRARY AND CRYPTO_LIBRARY)
-  #     set(OpenSSL_FOUND ON)
-  #     message(STATUS "USE CRYPTO_LIBRARY")
-  #     list(APPEND CPPdefinitions HAVE_OPENSSL)
-  #     list(APPEND EXTRA_LIBS ${OpenSSL_LIBRARY} ${CRYPTO_LIBRARY})
-  #     include_directories(BEFORE ${OpenSSL_ROOT_DIR}/include)
-  #   endif()
   endif()
   #######################################################################
 else()

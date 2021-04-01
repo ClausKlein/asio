@@ -1,7 +1,5 @@
 set(target_prefix asio_unit_)
 
-add_library(asio::standalone ALIAS standalone)
-
 set(test_PROGRAMS
   associated_allocator
   associated_executor
