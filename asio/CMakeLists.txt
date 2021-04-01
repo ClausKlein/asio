@@ -63,8 +63,8 @@ endif()
 # ASIO Options
 #==========================================================
 option(ASIO_NO_DEPRECATED "Build asio without deprecated interfaces" ON)
-option(ASIO_BUILD_TESTS "Build asio unittest too" OFF)
-option(ASIO_BUILD_EXAMPLES "Build asio examples too" OFF)
+option(ASIO_BUILD_TESTS "Build asio unittest too" ${ASIO_STANDALONE})
+option(ASIO_BUILD_EXAMPLES "Build asio examples too" ${ASIO_STANDALONE})
 option(ASIO_ENABLE_HANDLER_TRACKING "enable handler tracking" OFF)
 option(ASIO_DISABLE_KQUEUE "disable kqueue" OFF)
 option(ASIO_DISABLE_EPOLL "disable epoll" OFF)
@@ -136,12 +136,12 @@ if(NOT CONAN_COMPILER)
     option(Boost_DETAILED_FAILURE_MSG "Set to ON to get detailed information" ON)
     # Set Boost_NO_BOOST_CMAKE to ON to disable the search for boost-cmake.
     set(Boost_NO_BOOST_CMAKE ON)
-    set(BOOST_ROOT "/opt/local" CACHE PATH "path to the boost lib")
+    set(BOOST_ROOT "/usr/local" CACHE PATH "path to the boost lib")
     set(Boost_USE_STATIC_LIBS OFF)
     if(WIN32)
       set(Boost_USE_STATIC_RUNTIME OFF)
     endif()
-    find_package(Boost 1.67
+    find_package(Boost 1.71
         COMPONENTS atomic chrono coroutine context thread system
     )
     #####################################################################
