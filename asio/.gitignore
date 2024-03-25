@@ -1,0 +1,42 @@
+Makefile
+Makefile.in
+aclocal.m4
+asio.pc
+autom4te.cache
+compile
+config.guess
+config.log
+config.status
+config.sub
+configure
+depcomp
+install-sh
+missing
+test-driver
+/doc
+/lib
+/boostified
+/tsified
+*.gz
+*.bz2
+*.zip
+/*.cpp
+/*.hpp
+### cmake-init generated:
+# include/asio/asio.hpp
+.git
+.github/
+.idea/
+.vs/
+.vscode/
+build/
+cmake/open-cpp-coverage.cmake
+cmake-build-*/
+prefix/
+CMakeLists.txt.user
+# CMakeUserPresets.json
+# BUILDING.md
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+# HACKING.md
+README.md
