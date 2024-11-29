@@ -37,6 +37,7 @@ cmake/spell-targets.cmake
 cmake/spell.cmake
 cmake/variables.cmake
 cmake/windows-set-path.cmake
+src/examples/CMakeLists.txt
 src/tests/CMakeLists.txt
 '
 
