@@ -26,6 +26,8 @@ endif()
 
 option(ASIO_SEPARATE_COMPILATION "build asio lib too" ${PROJECT_IS_TOP_LEVEL})
 
+set(CMAKE_DEBUG_POSTFIX D)
+
 # ---- add dependency libraries ----
 
 find_package(Threads REQUIRED)
@@ -64,7 +66,7 @@ if(ASIO_SEPARATE_COMPILATION)
 
   # FIXME: some header in include/asio/detail fails CMAKE_VERIFY_INTERFACE_HEADER_SETS!
   # NOTE: we need them installed, but we used them install with asio_header INTERFACE! CK
-  set(_public_headers ${_asio_headers})
+  set(_public_headers include/asio.hpp ${_asio_headers})
   list(FILTER _public_headers EXCLUDE REGEX [=[.*/detail/.*\.hpp]=])
   list(FILTER _public_headers EXCLUDE REGEX [=[.*/impl/.*\.hpp]=])
   list(FILTER _public_headers EXCLUDE REGEX [=[.*/spawn.*\.hpp]=])

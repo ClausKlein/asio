@@ -50,7 +50,7 @@
       "hidden": true,
       "cacheVariables": {
         "CMAKE_CXX_EXTENSIONS": "OFF",
-        "CMAKE_CXX_STANDARD": "17",
+        "CMAKE_CXX_STANDARD": "20",
         "CMAKE_CXX_STANDARD_REQUIRED": "ON"
       }
     },
@@ -177,6 +177,13 @@
     {
       "name": "ci-build",
       "binaryDir": "${sourceDir}/build",
+      "installDir": "${sourceDir}/stagedir",
+      "cacheVariables": {
+        "CMAKE_PREFIX_PATH": {
+          "type": "path",
+          "value": "${sourceDir}/stagedir"
+        }
+      },
       "hidden": true
     },
     {

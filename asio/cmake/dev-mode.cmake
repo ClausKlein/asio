@@ -3,7 +3,9 @@ include(cmake/folders.cmake)
 option(ASIO_BUILD_TESTING "Use ctest" ON)
 if(ASIO_BUILD_TESTING)
   enable_testing()
+
   add_subdirectory(src/tests)
+  add_subdirectory(src/examples)
 endif()
 
 option(ASIO_BUILD_MCSS_DOCS "Build documentation using Doxygen and m.css" OFF)

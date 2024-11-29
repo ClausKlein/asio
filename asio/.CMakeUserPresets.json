@@ -72,13 +72,18 @@
       "name": "dev",
       "configurePreset": "dev",
       "configuration": "Debug",
-      "jobs": 12
+      "jobs": 12,
+      "targets": [
+        "install"
+      ]
     },
     {
       "name": "verify",
       "configurePreset": "dev",
       "jobs": 12,
-      "targets": ["all_verify_interface_header_sets"]
+      "targets": [
+        "all_verify_interface_header_sets"
+      ]
     }
   ],
   "testPresets": [
