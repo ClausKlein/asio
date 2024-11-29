@@ -1,0 +1,99 @@
+#!/bin/sh
+set -x
+set -e
+
+make
+git ls-files '::*CMakeLists.txt' | xargs cmake-lint
+ninja -C build/dev spell-check 2>&1 | tee .TODO.txt
+#
+ninja: Entering directory `build/dev'
+[1/1] Checking spelling
+FAILED: CMakeFiles/spell-check /Users/clausklein/Workspace/cpp/asio/asio/build/dev/CMakeFiles/spell-check 
+cd /Users/clausklein/Workspace/cpp/asio/asio && /usr/local/bin/cmake -D SPELL_COMMAND=codespell -P /Users/clausklein/Workspace/cpp/asio/asio/cmake/spell.cmake
+Used config files:
+    1: .codespellrc
+./include/asio/basic_datagram_socket.hpp:348: ore ==> or
+./include/asio/basic_datagram_socket.hpp:380: ore ==> or
+./include/asio/basic_raw_socket.hpp:342: ore ==> or
+./include/asio/basic_raw_socket.hpp:373: ore ==> or
+./include/asio/disposition.hpp:29: arbtirary ==> arbitrary
+./include/asio/io_context.hpp:301: reponsibility ==> responsibility
+./include/asio/io_context.hpp:350: reponsibility ==> responsibility
+./include/asio/use_future.hpp:93: retuned ==> returned
+./include/asio/impl/use_future.hpp:105: exeption ==> exception, exemption
+./include/asio/experimental/impl/parallel_group.hpp:81: operatations ==> operations
+./include/asio/experimental/impl/parallel_group.hpp:396: operatations ==> operations
+./include/asio/detail/executor_function.hpp:119: copyable ==> copiable
+./include/asio/detail/service_registry.hpp:79: Initalise ==> Initialise
+./include/asio/detail/service_registry.hpp:84: Initalise ==> Initialise
+./include/asio/detail/timer_queue_ptime.hpp:34: instantation ==> instantiation
+./include/asio/detail/win_iocp_io_context.hpp:260: resouce ==> resource
+./include/asio/detail/impl/socket_ops.ipp:3330: servent ==> servant, serpent, fervent
+./include/asio/detail/impl/socket_ops.ipp:3341: servent ==> servant, serpent, fervent
+./include/asio/detail/impl/socket_ops.ipp:3715: servent ==> servant, serpent, fervent
+./include/asio/execution/any_executor.hpp:112: requre ==> require
+./include/asio/execution/impl/bad_executor.ipp:2: exection ==> execution, ejection, election, exertion
+./include/asio/ip/detail/endpoint.hpp:31: implementating ==> implementing
+./src/examples/cpp20/operations/composed_6.cpp:116: asychronous ==> asynchronous
+./src/examples/cpp20/operations/composed_7.cpp:74: asychronous ==> asynchronous
+./src/examples/cpp20/operations/composed_7.cpp:120: asychronous ==> asynchronous
+./src/examples/cpp11/timers/time_t_timer.cpp:66: absoluate ==> absolute
+./src/examples/cpp11/porthopper/client.cpp:96: renegotation ==> renegotiation
+./src/examples/cpp11/porthopper/client.cpp:120: renegotation ==> renegotiation
+./src/examples/cpp11/porthopper/client.cpp:149: renegotation ==> renegotiation
+./src/examples/cpp11/porthopper/client.cpp:162: renegotation ==> renegotiation
+./src/examples/cpp11/operations/composed_6.cpp:93: asychronous ==> asynchronous
+./src/examples/cpp11/operations/composed_7.cpp:60: asychronous ==> asynchronous
+./src/examples/cpp14/operations/composed_6.cpp:111: asychronous ==> asynchronous
+./src/examples/cpp14/operations/composed_7.cpp:73: asychronous ==> asynchronous
+./src/examples/cpp14/operations/composed_7.cpp:119: asychronous ==> asynchronous
+./src/doc/history.qbk:327: potental ==> potential
+./src/doc/history.qbk:451: immmediate ==> immediate
+./src/doc/history.qbk:1149: occured ==> occurred
+./src/doc/history.qbk:1996: compatiblity ==> compatibility
+./src/doc/history.qbk:2113: Lightening ==> Lightning, Lighting
+./src/doc/history.qbk:2189: copyable ==> copiable
+./src/doc/history.qbk:2232: discconected ==> disconnected
+./src/doc/history.qbk:2394: compatability ==> compatibility
+./src/doc/history.qbk:2819: copyable ==> copiable
+./src/doc/history.qbk:2854: accomodate ==> accommodate
+./src/doc/history.qbk:3074: tranferred ==> transferred
+./src/doc/history.qbk:3193: re-use ==> reuse
+./src/doc/quickref.xml:17: thead ==> thread
+./src/doc/quickref.xml:26: thead ==> thread
+./src/doc/quickref.xml:133: thead ==> thread
+./src/doc/quickref.xml:139: thead ==> thread
+./src/doc/quickref.xml:350: thead ==> thread
+./src/doc/quickref.xml:356: thead ==> thread
+./src/doc/quickref.xml:454: thead ==> thread
+./src/doc/quickref.xml:460: thead ==> thread
+./src/doc/quickref.xml:604: thead ==> thread
+./src/doc/quickref.xml:619: thead ==> thread
+./src/doc/quickref.xml:719: thead ==> thread
+./src/doc/quickref.xml:731: thead ==> thread
+./src/doc/reference.qbk:1705: requre ==> require
+./src/doc/reference.qbk:3974: requre ==> require
+./src/doc/reference.qbk:18087: ore ==> or
+./src/doc/reference.qbk:18149: ore ==> or
+./src/doc/reference.qbk:32346: ore ==> or
+./src/doc/reference.qbk:32408: ore ==> or
+./src/doc/reference.qbk:91119: requre ==> require
+./src/doc/reference.qbk:112306: reponsibility ==> responsibility
+./src/doc/reference.qbk:112349: reponsibility ==> responsibility
+./src/doc/reference.qbk:112433: reponsibility ==> responsibility
+./src/doc/reference.qbk:112467: reponsibility ==> responsibility
+./src/doc/reference.qbk:167559: retuned ==> returned
+./src/doc/using.qbk:232: Explictly ==> Explicitly
+./src/doc/requirements/asynchronous_operations.qbk:332: asynchonous ==> asynchronous
+./src/doc/overview/coro.qbk:15: transfomers ==> transformers
+./src/doc/overview/coro.qbk:136: dermined ==> determined
+./src/doc/overview/coro.qbk:137: follwing ==> following
+./src/doc/overview/coro.qbk:194: direclty ==> directly
+./src/doc/overview/cpp20_coroutines.qbk:223: Asynchonous ==> Asynchronous
+./src/doc/overview/immediate_completion.qbk:16: immmediate ==> immediate
+./src/doc/overview/implementation.qbk:63: asynchonous ==> asynchronous
+CMake Error at cmake/spell.cmake:27 (message):
+  Run again with FIX=YES to fix these errors.
+
+
+ninja: build stopped: subcommand failed.
