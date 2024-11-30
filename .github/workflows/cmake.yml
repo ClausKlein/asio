@@ -24,10 +24,10 @@ jobs:
       - name: Install codespell
         run: pip3 install codespell
 
-      - name: Lint
-        if: always()
-        working-directory: asio
-        run: cmake -D FORMAT_COMMAND=clang-format-18 -P cmake/lint.cmake || echo ignored
+      # - name: Lint
+      #   if: always()
+      #   working-directory: asio
+      #   run: cmake -D FORMAT_COMMAND=clang-format-18 -P cmake/lint.cmake || echo ignored
 
       - name: Spell check
         if: always()
@@ -58,11 +58,11 @@ jobs:
 
       - name: Build
         working-directory: asio
-        run: cmake --build build/coverage -j 2
+        run: cmake --build build/coverage -j 4
 
       - name: Test
         working-directory: asio/build/coverage
-        run: ctest --output-on-failure --no-tests=error -j 2
+        run: ctest --output-on-failure --no-tests=error -j 4
 
       - name: Process coverage info
         working-directory: asio
@@ -89,7 +89,7 @@ jobs:
 
       - name: Build
         working-directory: asio
-        run: cmake --build build/sanitize -j 2
+        run: cmake --build build/sanitize -j 4
 
       - name: Test
         working-directory: asio/build/sanitize
@@ -100,12 +100,13 @@ jobs:
             strict_init_order=1:\
             detect_leaks=1"
           UBSAN_OPTIONS: print_stacktrace=1
-        run: ctest --output-on-failure --no-tests=error -j 2
+        run: ctest --output-on-failure --no-tests=error -j 4
 
   test:
     needs: [lint]
 
     strategy:
+      fail-fast: false
       matrix:
         os: [macos-15, ubuntu-24.04, windows-2022]
 
@@ -116,27 +117,50 @@ jobs:
 
       - name: Install static analyzers
         if: matrix.os == 'ubuntu-24.04'
-        run: >-
-          sudo apt-get install clang-tidy-18 cppcheck -y -q
+        run: |
+          sudo apt-get install cppcheck ninja-build -y -q
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 19 all
+          sudo update-alternatives --install \
+            /usr/bin/clang-tidy clang-tidy \
+            /usr/bin/clang-tidy-19 150
 
-          sudo update-alternatives --install
-          /usr/bin/clang-tidy clang-tidy
-          /usr/bin/clang-tidy-18 150
+      - name: Install llvm-19
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          brew install llvm@19
+          echo 'export PATH="/opt/homebrew/opt/llvm/bin:$PATH"' >> /Users/runner/.envrc
+          echo 'export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"' >> /Users/runner/.envrc
+          echo 'export CPPFLAGS="-L/opt/homebrew/opt/llvm/include"' >> /Users/runner/.envrc
 
-      - name: Setup MultiToolTask
+      - name: Configure windows
         if: matrix.os == 'windows-2022'
+        working-directory: asio
         run: |
           Add-Content "$env:GITHUB_ENV" 'UseMultiToolTask=true'
           Add-Content "$env:GITHUB_ENV" 'EnforceProcessCountAcrossBuilds=true'
+          cmake --preset=ci-windows
 
-      - name: Configure
-        shell: pwsh
+      - name: Configure macos
+        if: matrix.os == 'macos-15'
         working-directory: asio
-        run: cmake "--preset=ci-$("${{ matrix.os }}".split("-")[0])"
+        shell: bash
+        run: |
+          source /Users/runner/.envrc
+          which clang++ && clang++ --version
+          CXX=$(brew --prefix llvm@19)/bin/clang++ cmake --preset=ci-macos
+
+      - name: Configure ubuntu
+        if: matrix.os == 'ubuntu-24.04'
+        working-directory: asio
+        env:
+          CXX: clang++-19
+        run: cmake --preset=ci-ubuntu
 
       - name: Build
         working-directory: asio
-        run: cmake --build build --config Release -j 2
+        run: cmake --build build --config Release -j 4
 
       - name: Install
         working-directory: asio
@@ -144,7 +168,7 @@ jobs:
 
       - name: Test
         working-directory: asio/build
-        run: ctest --output-on-failure --no-tests=error -C Release -j 2
+        run: ctest --output-on-failure --no-tests=error -C Release -j 4
 
   docs:
     # Deploy docs only when builds succeed
