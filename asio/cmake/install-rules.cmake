@@ -33,8 +33,9 @@ set(ASIO_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/${_package}"
 )
 mark_as_advanced(ASIO_INSTALL_CMAKEDIR)
 
-install(FILES cmake/install-config.cmake DESTINATION "${ASIO_INSTALL_CMAKEDIR}" RENAME "${_package}Config.cmake"
-        COMPONENT asio_Development
+configure_file(cmake/install-config.cmake install-config.cmake @ONLY)
+install(FILES ${PROJECT_BINARY_DIR}/install-config.cmake DESTINATION "${ASIO_INSTALL_CMAKEDIR}"
+        RENAME "${_package}Config.cmake" COMPONENT asio_Development
 )
 
 install(FILES "${PROJECT_BINARY_DIR}/${_package}ConfigVersion.cmake" DESTINATION "${ASIO_INSTALL_CMAKEDIR}"
