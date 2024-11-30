@@ -25,21 +25,23 @@ elseif(ASIO_HAS_SNPRINTF)
 endif()
 
 option(ASIO_SEPARATE_COMPILATION "build asio lib too" ${PROJECT_IS_TOP_LEVEL})
-
 set(CMAKE_DEBUG_POSTFIX D)
 
 # ---- add dependency libraries ----
 
 find_package(Threads REQUIRED)
+find_package(OpenSSL REQUIRED)
 
 # ---- Declare library ----
 
 file(GLOB_RECURSE _asio_implementation "include/asio/*/*.hpp" "include/asio/*.ipp")
 list(FILTER _asio_implementation EXCLUDE REGEX [=[.*/experimental/.*]=])
 
+# asio interface library
 add_library(asio_header INTERFACE)
 add_library(asio::asio_header ALIAS asio_header)
 target_sources(asio_header INTERFACE FILE_SET HEADERS BASE_DIRS include FILES ${_asio_implementation})
+target_link_libraries(asio_header INTERFACE OpenSSL::SSL OpenSSL::Crypto)
 
 target_compile_definitions(asio_header INTERFACE ${CPPdefinitions})
 target_compile_features(
@@ -51,17 +53,14 @@ target_link_libraries(asio_header INTERFACE Threads::Threads)
 if(ASIO_SEPARATE_COMPILATION)
   set(_libasio_SOURCES src/asio.cpp)
 
-  # TODO(ssl): find_package(OpenSSL)
   if(OpenSSL_FOUND)
-    # TODO(ssl): list(APPEND _libasio_SOURCES src/asio_ssl.cpp)
+    list(APPEND _libasio_SOURCES src/asio_ssl.cpp)
   endif()
 
   set(CMAKE_VERIFY_INTERFACE_HEADER_SETS ${PROJECT_IS_TOP_LEVEL})
 
   file(GLOB_RECURSE _asio_headers "include/asio/*.hpp")
   list(FILTER _asio_headers EXCLUDE REGEX [=[.*/experimental/.*\.hpp]=])
-  list(FILTER _asio_headers EXCLUDE REGEX [=[.*/ssl\.hpp]=])
-  list(FILTER _asio_headers EXCLUDE REGEX [=[.*/ssl/\.*]=])
   list(FILTER _asio_headers EXCLUDE REGEX [=[.*/spawn.*\.hpp]=])
 
   # FIXME: some header in include/asio/detail fails CMAKE_VERIFY_INTERFACE_HEADER_SETS!
@@ -89,7 +88,7 @@ if(ASIO_SEPARATE_COMPILATION)
   endif()
 
   if(OpenSSL_FOUND)
-    target_link_libraries(asio PUBLIC OpenSSL::SSL)
+    target_link_libraries(asio PUBLIC OpenSSL::SSL OpenSSL::Crypto)
   endif()
 endif()
 
@@ -99,6 +98,7 @@ if(NOT CMAKE_SKIP_INSTALL_RULES)
   include(cmake/install-rules.cmake)
   configure_file(asio.pc.cmake asio.pc)
   install(FILES ${PROJECT_BINARY_DIR}/asio.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+  install(DIRECTORY module DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/asio)
 endif()
 
 # ---- Developer mode ----
