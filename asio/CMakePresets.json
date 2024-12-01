@@ -133,7 +133,6 @@
         "ci-std"
       ],
       "generator": "Ninja",
-      "architecture": "x64",
       "hidden": true
     },
     {

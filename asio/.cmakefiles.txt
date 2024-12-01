@@ -3,6 +3,7 @@
 # git ls-files '::*.md' '::*.cmake' '::*CMakeLists.txt' '::*.json' '::*.cmake.in'
 #
 files='
+../.github/workflows/cmake.yml
 .CMakeUserPresets.json
 .TODO.txt
 .clang-format
