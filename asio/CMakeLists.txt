@@ -95,6 +95,7 @@ endif()
 # ---- Install rules ----
 
 if(NOT CMAKE_SKIP_INSTALL_RULES)
+  include(cmake/AddUninstallTarget.cmake)
   include(cmake/install-rules.cmake)
   configure_file(asio.pc.cmake asio.pc)
   install(FILES ${PROJECT_BINARY_DIR}/asio.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
