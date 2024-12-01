@@ -98,7 +98,7 @@ if(NOT CMAKE_SKIP_INSTALL_RULES)
   include(cmake/install-rules.cmake)
   configure_file(asio.pc.cmake asio.pc)
   install(FILES ${PROJECT_BINARY_DIR}/asio.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
-  install(DIRECTORY module DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/asio)
+  install(FILES module/asio.cppm DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/asio/module)
 endif()
 
 # ---- Developer mode ----

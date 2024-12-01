@@ -84,7 +84,7 @@ inline net::awaitable<void> do_listen()
     {
         tcp::socket socket{ex};
         co_await acceptor.async_accept(socket, net::deferred);
-        net::co_spawn(ex, [s = std::move(socket)] mutable {
+        net::co_spawn(ex, [s = std::move(socket)]() mutable {
             return do_session(std::move(s));
         }, net::detached);
     }

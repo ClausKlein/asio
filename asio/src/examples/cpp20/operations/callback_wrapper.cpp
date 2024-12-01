@@ -8,25 +8,8 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifdef USE_MODULES
-#  ifdef HAS_STDLIB_MODULES
-import std;
-import std.compat;
-#  else
-#    include <cstdlib>
-#    include <exception>
-#    include <future>
-#    include <iostream>
-#    include <string>
-#    include <system_error>
-#    include <thread>
-#    include <utility>
-#  endif
-import asio;
-#  else
-#    include <asio.hpp>
-#    include <iostream>
-#  endif
+#include <asio.hpp>
+#include <iostream>
 
 //------------------------------------------------------------------------------
 

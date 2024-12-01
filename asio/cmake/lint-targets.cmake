@@ -1,4 +1,4 @@
-set(ACIO_FORMAT_PATTERNS *.json # src/*.cpp src/*.hpp include/*.hpp tests/*.cpp tests/*.hpp
+set(ACIO_FORMAT_PATTERNS *.json *.cppm # src/*.cpp src/*.hpp include/*.hpp tests/*.cpp tests/*.hpp
     CACHE STRING "; separated patterns relative to the project source dir to format"
 )
 
