@@ -40,7 +40,7 @@ cmake/windows-set-path.cmake
 module/asio.cppm
 module/tests/main.hpp
 module/tests/main.cpp
-src/examples/CMakeLists.txt
+module/tests/CMakeLists.txt
 src/tests/CMakeLists.txt
 '
 
