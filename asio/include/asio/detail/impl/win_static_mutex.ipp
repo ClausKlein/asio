@@ -89,7 +89,7 @@ int win_static_mutex::do_init()
   }
 # endif
 #else
-  __try
+  try
   {
 # if defined(UNDER_CE)
     ::InitializeCriticalSection(&crit_section_);
@@ -111,12 +111,15 @@ int win_static_mutex::do_init()
     }
 # endif
   }
-  __except(GetExceptionCode() == STATUS_NO_MEMORY
-      ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
+  catch (const std::bad_alloc&)
   {
-    ::ReleaseMutex(mutex);
-    ::CloseHandle(mutex);
-    return ERROR_OUTOFMEMORY;
+    if(GetExceptionCode() == STATUS_NO_MEMORY
+      ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
+    {
+      ::ReleaseMutex(mutex);
+      ::CloseHandle(mutex);
+      return ERROR_OUTOFMEMORY;
+    }
   }
 #endif
 
