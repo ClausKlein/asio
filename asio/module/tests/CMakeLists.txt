@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.25...3.31)
 
-project(asio_examples LANGUAGES CXX)
+project(asio_moddule_examples LANGUAGES CXX)
 
 if(PROJECT_IS_TOP_LEVEL)
   # Find the Asio package containing the function to build the module
-  find_package(asio 1.32.0.1 EXACT REQUIRED HINT ../stagedir/lib)
+  find_package(asio 1.32.0.1 EXACT REQUIRED HINT ../../stagedir/lib)
   enable_testing()
 
   # Use modules?
@@ -35,15 +35,14 @@ if(PROJECT_IS_TOP_LEVEL)
 
 endif()
 
-# set(ALL_EXAMPLES cpp20/operations/callback_wrapper.cpp)
-# list(APPEND ALL_EXAMPLES ../../module/tests/main.cpp)
+# list(APPEND ALL_EXAMPLES module/tests/main.cpp)
 set(ALL_EXAMPLES main)
 
 message(STATUS "Examples to be built: ${ALL_EXAMPLES}")
 
 foreach(example ${ALL_EXAMPLES})
   add_executable(${example})
-  target_sources(${example} PRIVATE ../../module/tests/${example}.cpp)
+  target_sources(${example} PRIVATE ${example}.cpp)
   if(USE_MODULES)
     target_link_libraries(${example} asio_module)
     target_compile_definitions(${example} PUBLIC USE_MODULES)
