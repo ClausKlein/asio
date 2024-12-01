@@ -9,7 +9,7 @@ include(../../cmake/windows-set-path.cmake OPTIONAL)
 # ---- Dependencies ----
 
 if(PROJECT_IS_TOP_LEVEL)
-  find_package(asio 1.32.0 EXACT REQUIRED)
+  find_package(asio 1.32.0.1 EXACT REQUIRED)
   enable_testing()
 endif()
 
@@ -35,7 +35,7 @@ if(NOT PROJECT_IS_TOP_LEVEL)
     add_test(
       NAME find-package-test
       COMMAND ${CMAKE_CTEST_COMMAND} --verbose --output-on-failure -C Debug --build-and-test
-              "${CMAKE_SOURCE_DIR}/src/examples" "${CMAKE_CURRENT_BINARY_DIR}/find-package-test" --build-generator
+              "${CMAKE_SOURCE_DIR}/module/tests" "${CMAKE_CURRENT_BINARY_DIR}/find-package-test" --build-generator
               ${CMAKE_GENERATOR} --build-makeprogram ${CMAKE_MAKE_PROGRAM} --build-options
               "-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}" "-DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}"
               "-DCMAKE_BUILD_TYPE=Debug" "-DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}"

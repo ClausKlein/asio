@@ -5,7 +5,7 @@ if(ASIO_BUILD_TESTING)
   enable_testing()
 
   add_subdirectory(src/tests)
-  add_subdirectory(src/examples)
+  add_subdirectory(module/tests)
 endif()
 
 option(ASIO_BUILD_MCSS_DOCS "Build documentation using Doxygen and m.css" OFF)
