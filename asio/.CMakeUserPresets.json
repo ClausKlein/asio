@@ -12,10 +12,7 @@
       "generator": "Ninja",
       "inherits": [
         "dev-mode"
-      ],
-      "cacheVariables": {
-        "BUILD_MCSS_DOCS": "ON"
-      }
+      ]
     },
     {
       "name": "dev-Linux",
