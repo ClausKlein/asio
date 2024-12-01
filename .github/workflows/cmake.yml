@@ -50,7 +50,7 @@ jobs:
 
       - name: Install LCov
         run: sudo apt-get update -q
-          && sudo apt-get install lcov -q -y
+          && sudo apt-get install ninja-build lcov -q -y
 
       - name: Configure
         working-directory: asio
@@ -82,6 +82,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup ninja build toolchain
+        uses: aminya/setup-cpp@v1
+        with:
+          ninja: true
 
       - name: Configure
         working-directory: asio
@@ -115,10 +120,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup ninja build toolchain
+        uses: aminya/setup-cpp@v1
+        with:
+          ninja: true
+
       - name: Install static analyzers
         if: matrix.os == 'ubuntu-24.04'
         run: |
-          sudo apt-get install cppcheck ninja-build -y -q
+          # Not used! sudo apt-get install cppcheck -y -q
           wget https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
           sudo ./llvm.sh 19 all
@@ -133,6 +143,18 @@ jobs:
           echo 'export PATH="/opt/homebrew/opt/llvm/bin:$PATH"' >> /Users/runner/.envrc
           echo 'export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"' >> /Users/runner/.envrc
           echo 'export CPPFLAGS="-L/opt/homebrew/opt/llvm/include"' >> /Users/runner/.envrc
+
+      # see https://github.com/mathstuf/cxx-modules-sandbox/blob/master/.github/workflows/cmake.yml
+      - name: Visual Studio toolchain environment
+        uses: TheMrMilchmann/setup-msvc-dev@v1
+        with:
+          arch: x64
+
+      # # see https://github.com/marketplace/actions/enable-developer-command-prompt
+      # - uses: ilammy/msvc-dev-cmd@v1
+      #   if: matrix.os == 'windows-2022'
+      #   with:
+      #     vsversion: 2022
 
       - name: Configure windows
         if: matrix.os == 'windows-2022'
@@ -160,15 +182,15 @@ jobs:
 
       - name: Build
         working-directory: asio
-        run: cmake --build build --config Release -j 4
+        run: cmake --build build --config Debug -j 4
 
       - name: Install
         working-directory: asio
-        run: cmake --install build --config Release --prefix prefix
+        run: cmake --install build --config Debug  # see CMakePresets.json! --prefix stagedir
 
       - name: Test
         working-directory: asio/build
-        run: ctest --output-on-failure --no-tests=error -C Release -j 4
+        run: ctest --output-on-failure --no-tests=error -C Debug -j 4
 
   docs:
     # Deploy docs only when builds succeed
@@ -198,7 +220,7 @@ jobs:
         with: {python-version: "3.12"}
 
       - name: Install m.css dependencies
-        run: pip3 install jinja2 Pygments
+        run: pip3 install ninja jinja2 Pygments
 
       - name: Install Doxygen
         run: sudo apt-get update -q
