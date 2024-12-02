@@ -15,7 +15,7 @@ Checks: "*,\
   -*-magic-numbers,\
   -performance-avoid-endl,
   -misc-include-cleaner,\
-  -misc-header-include-cycle,\
+  misc-header-include-cycle,\
   -misc-non-private-member-variables-in-classes"
 WarningsAsErrors: ''
 CheckOptions:

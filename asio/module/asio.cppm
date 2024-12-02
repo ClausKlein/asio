@@ -65,6 +65,9 @@ export using asio::ssl::verify_context;
 export using asio::ssl::stream;
 namespace error
 {
+export using asio::ssl::error::stream_truncated;
+export using asio::ssl::error::unspecified_system_error;
+export using asio::ssl::error::unexpected_result;
 export using asio::ssl::error::stream_errors;
 export using asio::ssl::error::make_error_code;
 }  // namespace error

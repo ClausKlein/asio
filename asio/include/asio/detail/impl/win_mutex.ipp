@@ -66,9 +66,7 @@ int win_mutex::do_init()
   }
   catch (const std::bad_alloc&)
   {
-    if(GetExceptionCode() == STATUS_NO_MEMORY
-      ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
-      return ERROR_OUTOFMEMORY;
+    return ERROR_OUTOFMEMORY;
   }
 
   return 0;
