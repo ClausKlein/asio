@@ -55,7 +55,7 @@ inline net::awaitable<void> do_session(tcp::socket client_sock)
 
 inline net::awaitable<void> do_listen()
 {
-    auto ex = co_await net::this_coro::executor;
+    const auto ex = co_await net::this_coro::executor;
     error_code ec;
     tcp::endpoint endpoint {net::ip::address_v4::loopback(), 3000};
 
