@@ -113,13 +113,9 @@ int win_static_mutex::do_init()
   }
   catch (const std::bad_alloc&)
   {
-    if(GetExceptionCode() == STATUS_NO_MEMORY
-      ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
-    {
-      ::ReleaseMutex(mutex);
-      ::CloseHandle(mutex);
-      return ERROR_OUTOFMEMORY;
-    }
+    ::ReleaseMutex(mutex);
+    ::CloseHandle(mutex);
+    return ERROR_OUTOFMEMORY;
   }
 #endif
 
