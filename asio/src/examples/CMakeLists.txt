@@ -11,21 +11,21 @@ if(PROJECT_IS_TOP_LEVEL)
 endif()
 
 add_executable(timer4 cpp11/tutorial/timer4/timer.cpp)
-target_link_libraries(timer4 PUBLIC asio::asio)
+target_link_libraries(timer4 PUBLIC asio::asio_header)
 
-add_executable(async_tcp_client cpp11/timeouts//async_tcp_client.cpp)
-target_link_libraries(async_tcp_client PUBLIC asio::asio)
+add_executable(async_tcp_client cpp11/timeouts/async_tcp_client.cpp)
+target_link_libraries(async_tcp_client PUBLIC asio::asio_header)
 
 add_executable(
     chat_client
     cpp11/chat/chat_client.cpp
     cpp11/chat/chat_message.hpp
 )
-target_link_libraries(chat_client PUBLIC asio::asio)
+target_link_libraries(chat_client PUBLIC asio::asio_header)
 
 add_executable(
     chat_server
     cpp11/chat/chat_server.cpp
     cpp11/chat/chat_message.hpp
 )
-target_link_libraries(chat_server PUBLIC asio::asio)
+target_link_libraries(chat_server PUBLIC asio::asio_header)
