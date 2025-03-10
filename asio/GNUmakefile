@@ -16,8 +16,8 @@ check:
 	# ninja -C build/dev spell-check
 	# ninja -C build/dev format-check
 
-format:
-	git ls-files ::*CMakeLists.txt ::*.cmake | xargs cmake-format -i
+format: .init
+	git ls-files ::*CMakeLists.txt ::cmake/*.cmake | xargs gersemi -i
 
 test:
 	cmake --preset ci-${hostSystemName}
