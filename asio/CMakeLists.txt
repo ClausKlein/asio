@@ -26,6 +26,7 @@ elseif(ASIO_HAS_SNPRINTF)
 endif()
 
 option(ASIO_SEPARATE_COMPILATION "build asio lib too" ${PROJECT_IS_TOP_LEVEL})
+option(ASIO_BUILD_EXAMPLES "build asio examples too" ${PROJECT_IS_TOP_LEVEL})
 set(CMAKE_DEBUG_POSTFIX D)
 
 # ---- add dependency libraries ----
@@ -83,7 +84,7 @@ if(ASIO_SEPARATE_COMPILATION)
     #   message(INFO "${header}")
     # endforeach()
 
-    add_library(asio SHARED ${_libasio_SOURCES})
+    add_library(asio ${_libasio_SOURCES})
     add_library(asio::asio ALIAS asio)
     target_sources(
         asio
@@ -115,7 +116,9 @@ if(ASIO_SEPARATE_COMPILATION)
     endif()
 endif()
 
-add_subdirectory(src/examples)
+if(ASIO_BUILD_EXAMPLES)
+    add_subdirectory(src/examples)
+endif()
 
 # ---- Install rules ----
 

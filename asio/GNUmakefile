@@ -12,7 +12,7 @@ all: .init
 	cmake --workflow --preset dev --fresh
 
 check:
-	run-clang-tidy -p build/dev -checks='-*,misc-header-*,misc-include-*' src/tests src/examples
+	run-clang-tidy -p build/dev -checks='-*,misc-header-*,misc-include-*,modernize-*' src/tests src/examples
 	# ninja -C build/dev spell-check
 	# ninja -C build/dev format-check
 
