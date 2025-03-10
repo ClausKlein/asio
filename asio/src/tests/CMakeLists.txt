@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25...3.31)
+cmake_minimum_required(VERSION 3.28...4.0)
 
 project(asio_test LANGUAGES CXX)
 
@@ -9,7 +9,7 @@ include(../../cmake/windows-set-path.cmake OPTIONAL)
 # ---- Dependencies ----
 
 if(PROJECT_IS_TOP_LEVEL)
-  find_package(asio 1.32.0.1 EXACT REQUIRED)
+  find_package(asio 1.34.0.1 EXACT REQUIRED)
   enable_testing()
 endif()
 

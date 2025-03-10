@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 3.25...3.31)
+cmake_minimum_required(VERSION 3.28...4.0)
 
 project(asio_moddule_examples LANGUAGES CXX)
 
 if(PROJECT_IS_TOP_LEVEL)
   # Find the Asio package containing the function to build the module
-  find_package(asio 1.32.0.1 EXACT REQUIRED HINT ../../stagedir/lib)
+  find_package(asio 1.34.0.1 EXACT REQUIRED HINT ../../stagedir/lib)
   enable_testing()
 
   # Use modules?
@@ -13,9 +13,9 @@ if(PROJECT_IS_TOP_LEVEL)
   set(CMAKE_CXX_EXTENSIONS OFF)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
   if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.28.4 AND CMAKE_GENERATOR STREQUAL "Ninja")
-    if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 17.0)
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 19.0)
       set(USE_MODULES TRUE)
-      # see https://releases.llvm.org/15.0.0/projects/libcxx/docs/ReleaseNotes.html
+      # see https://releases.llvm.org/19.0.0/projects/libcxx/docs/ReleaseNotes.html
       # Always use libc++
       add_compile_options(-fexperimental-library)
       add_link_options(-lc++experimental)
