@@ -1,25 +1,23 @@
 # Standard stuff
 
 .SUFFIXES:
-$(VERBOSE).SILENT:
 
 MAKEFLAGS+= --no-builtin-rules
 MAKEFLAGS+= --warn-undefined-variables
 
 export hostSystemName=$(shell uname)
 
-.PHONY: all check test clean distclean
+.PHONY: all check test clean format distclean
 all: .init
 	cmake --workflow --preset dev --fresh
 
 check:
-	-iwyu_tool -p build/dev \
-		build/dev/asio_verify_interface_header_sets/asio/basic_readable_pipe.hpp.cxx \
-		build/dev/asio_verify_interface_header_sets/asio/detail/reactive_socket_send_op.hpp.cxx \
-		-- -Xiwyu --cxx17ns #XXX -Xiwyu --transitive_includes_only
-	run-clang-tidy -p build/dev -checks='-*,misc-header-*,misc-include-*' src/tests
+	run-clang-tidy -p build/dev -checks='-*,misc-header-*,misc-include-*' src/tests src/examples
 	# ninja -C build/dev spell-check
 	# ninja -C build/dev format-check
+
+format:
+	git ls-files ::*CMakeLists.txt ::*.cmake | xargs cmake-format -i
 
 test:
 	cmake --preset ci-${hostSystemName}
@@ -31,7 +29,7 @@ test:
 
 .init: requirements.txt .CMakeUserPresets.json
 	perl -p -e 's/<hostSystemName>/${hostSystemName}/;' .CMakeUserPresets.json > CMakeUserPresets.json
-	-pip3 install --user --upgrade -r requirements.txt
+	-pip3 install --upgrade -r requirements.txt
 	touch .init
 
 clean:
