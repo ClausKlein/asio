@@ -1,6 +1,6 @@
 //
-// timer.cpp
-// ~~~~~~~~~
+// timer4/timer.cpp
+// ~~~~~~~~~~~~~~~~
 //
 // Copyright (c) 2003-2025 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 //
@@ -10,16 +10,16 @@
 
 #include <functional>
 #include <iostream>
-#include <asio.hpp>
+#include "asio/io_context.hpp"
+#include "asio/steady_timer.hpp"
 
 class printer
 {
 public:
   printer(asio::io_context& io)
-    : timer_(io, asio::chrono::seconds(1)),
-      count_(0)
+    : timer_(io, asio::chrono::seconds(1))
   {
-    timer_.async_wait(std::bind(&printer::print, this));
+    timer_.async_wait([this](const asio::error_code& /*ec*/) { print(); });
   }
 
   ~printer()
@@ -35,16 +35,16 @@ public:
       ++count_;
 
       timer_.expires_at(timer_.expiry() + asio::chrono::seconds(1));
-      timer_.async_wait(std::bind(&printer::print, this));
+      timer_.async_wait([this](const asio::error_code& /*ec*/) { print(); });
     }
   }
 
 private:
   asio::steady_timer timer_;
-  int count_;
+  int count_{0};
 };
 
-int main()
+auto main() -> int
 {
   asio::io_context io;
   printer p(io);
