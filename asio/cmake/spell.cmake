@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.14)
 
 macro(default name)
-  if(NOT DEFINED "${name}")
-    set("${name}" "${ARGN}")
-  endif()
+    if(NOT DEFINED "${name}")
+        set("${name}" "${ARGN}")
+    endif()
 endmacro()
 
 default(SPELL_COMMAND codespell)
@@ -11,22 +11,24 @@ default(FIX NO)
 
 find_program(CODESPELL_EXECUTABLE NAMES codespell)
 if(NOT CODESPELL_EXECUTABLE)
-  message(FATAL_ERROR "${SPELL_COMMAND} was not found")
+    message(FATAL_ERROR "${SPELL_COMMAND} was not found")
 endif()
 
 set(flag "")
 if(FIX)
-  set(flag -w)
+    set(flag -w)
 endif()
 
 execute_process(
-  COMMAND "${CODESPELL_EXECUTABLE}" ${flag} WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}" RESULT_VARIABLE result
+    COMMAND "${CODESPELL_EXECUTABLE}" ${flag}
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+    RESULT_VARIABLE result
 )
 
 if(result EQUAL "65")
-  message(FATAL_ERROR "Run again with FIX=YES to fix these errors.")
+    message(FATAL_ERROR "Run again with FIX=YES to fix these errors.")
 elseif(result EQUAL "64")
-  message(FATAL_ERROR "Spell checker printed the usage info. Bad arguments?")
+    message(FATAL_ERROR "Spell checker printed the usage info. Bad arguments?")
 elseif(NOT result EQUAL "0")
-  message(FATAL_ERROR "Spell checker returned with ${result}")
+    message(FATAL_ERROR "Spell checker returned with ${result}")
 endif()
