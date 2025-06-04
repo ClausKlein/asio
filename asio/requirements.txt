@@ -4,7 +4,7 @@
 Pygments
 PyYAML
 cmake-init>=0.40.5
-cmake>=3.28.4
+cmake>=3.30.8
 cmakelint>=1.4.2
 codespell>=2.2.6
 gcovr>=8.2
