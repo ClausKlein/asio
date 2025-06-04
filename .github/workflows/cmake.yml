@@ -123,6 +123,7 @@ jobs:
       - name: Setup ninja build toolchain
         uses: aminya/setup-cpp@v1
         with:
+          compiler: gcc-15
           ninja: true
 
       - name: Install static analyzers
@@ -131,15 +132,15 @@ jobs:
           # Not used! sudo apt-get install cppcheck -y -q
           wget https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
-          sudo ./llvm.sh 19 all
+          sudo ./llvm.sh 20 all
           sudo update-alternatives --install \
             /usr/bin/clang-tidy clang-tidy \
-            /usr/bin/clang-tidy-19 150
+            /usr/bin/clang-tidy-20 150
 
-      - name: Install llvm-19
+      - name: Install llvm-20
         if: startsWith(matrix.os, 'macos')
         run: |
-          brew install llvm@19
+          brew install llvm@20
           echo 'export PATH="/opt/homebrew/opt/llvm/bin:$PATH"' >> /Users/runner/.envrc
           echo 'export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"' >> /Users/runner/.envrc
           echo 'export CPPFLAGS="-L/opt/homebrew/opt/llvm/include"' >> /Users/runner/.envrc
@@ -171,13 +172,13 @@ jobs:
         run: |
           source /Users/runner/.envrc
           which clang++ && clang++ --version
-          CXX=$(brew --prefix llvm@19)/bin/clang++ cmake --preset=ci-macos
+          CXX=$(brew --prefix llvm@20)/bin/clang++ cmake --preset=ci-macos
 
       - name: Configure ubuntu
         if: matrix.os == 'ubuntu-24.04'
         working-directory: asio
         env:
-          CXX: clang++-19
+          CXX: clang++-18
         run: cmake --preset=ci-ubuntu
 
       - name: Build
