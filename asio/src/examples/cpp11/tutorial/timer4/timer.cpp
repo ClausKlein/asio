@@ -1,54 +1,44 @@
-//
-// timer4/timer.cpp
-// ~~~~~~~~~~~~~~~~
-//
-// Copyright (c) 2003-2025 Christopher M. Kohlhoff (chris at kohlhoff dot com)
-//
-// Distributed under the Boost Software License, Version 1.0. (See accompanying
-// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-//
-
-#include <functional>
-#include <iostream>
+#include <print>
+#include <memory>
+#include <utility>
 #include "asio/io_context.hpp"
 #include "asio/steady_timer.hpp"
 
-class printer
-{
+class printer {
 public:
-  printer(asio::io_context& io)
-    : timer_(io, asio::chrono::seconds(1))
-  {
-    timer_.async_wait([this](const asio::error_code& /*ec*/) { print(); });
-  }
-
-  ~printer()
-  {
-    std::cout << "Final count is " << count_ << std::endl;
-  }
-
-  void print()
-  {
-    if (count_ < 5)
-    {
-      std::cout << count_ << std::endl;
-      ++count_;
-
-      timer_.expires_at(timer_.expiry() + asio::chrono::seconds(1));
-      timer_.async_wait([this](const asio::error_code& /*ec*/) { print(); });
+    explicit printer(asio::io_context& io) : timer_(io, asio::chrono::seconds(1)) {
+        timer_.async_wait([this](const asio::error_code& /*ec*/) { print(); });
     }
-  }
+
+    ~printer() noexcept {
+        std::print("Final count is {}\n", count_);
+    }
+
+    void print() {
+        if (count_ < kMaxCount) {
+            std::print("{}\n", count_);
+            ++count_;
+
+            timer_.expires_at(timer_.expiry() + asio::chrono::seconds(1));
+            timer_.async_wait([this](const asio::error_code& /*ec*/) { print(); });
+        }
+    }
 
 private:
-  asio::steady_timer timer_;
-  int count_{0};
+    static constexpr int kMaxCount = 5;
+    asio::steady_timer timer_;
+    int count_ = 0;
 };
 
-auto main() -> int
-{
-  asio::io_context io;
-  printer p(io);
-  io.run();
+auto main() -> int {
+    try {
+        asio::io_context io;
+        auto p = std::make_unique<printer>(io);
+        io.run();
+    } catch (const std::exception& e) {
+        std::print("Error: {}\n", e.what());
+        return 1;
+    }
 
-  return 0;
+    return 0;
 }

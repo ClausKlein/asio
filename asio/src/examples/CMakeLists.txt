@@ -4,14 +4,19 @@ project(asio-examples VERSION 1.34.0.1 LANGUAGES CXX)
 
 if(PROJECT_IS_TOP_LEVEL)
     find_package(asio ${PROJECT_VERSION} REQUIRED HINTS ../../stagedir)
-
-    set(CMAKE_CXX_STANDARD 20)
-    set(CMAKE_CXX_EXTENSIONS OFF)
-    set(CMAKE_CXX_STANDARD_REQUIRED ON)
 endif()
 
-add_executable(timer4 cpp11/tutorial/timer4/timer.cpp)
-target_link_libraries(timer4 PUBLIC asio::asio_header)
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    add_compile_options(-fexperimental-library)
+    add_link_options(-L$ENV{LLVM_ROOT}/lib/c++ -lc++experimental)
+
+    add_executable(timer4 cpp11/tutorial/timer4/timer.cpp)
+    target_link_libraries(timer4 PUBLIC asio::asio_header)
+endif()
 
 add_executable(async_tcp_client cpp11/timeouts/async_tcp_client.cpp)
 target_link_libraries(async_tcp_client PUBLIC asio::asio_header)

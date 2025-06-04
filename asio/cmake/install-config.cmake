@@ -1,6 +1,7 @@
 include(CMakeFindDependencyMacro)
 find_dependency(Threads)
-find_dependency(OpenSSL)
+
+find_package(OpenSSL QUIET)
 
 function(add_asio_module NAME)
     set(ASIO_ROOT @CMAKE_INSTALL_PREFIX@)
@@ -25,7 +26,19 @@ function(add_asio_module NAME)
             FILES ${ASIO_ROOT}/lib/cmake/asio/module/asio.cppm
     )
     # cmake-format: on
-    target_link_libraries(${NAME} PUBLIC OpenSSL::SSL OpenSSL::Crypto)
+    if(OpenSSL_FOUND)
+        target_link_libraries(${NAME} PUBLIC OpenSSL::SSL OpenSSL::Crypto)
+    endif()
 endfunction()
 
 include("${CMAKE_CURRENT_LIST_DIR}/asioTargets.cmake")
+
+if(OpenSSL_FOUND)
+    set_target_properties(
+        asio::asio_header
+        PROPERTIES
+            # TODO(CK): how to append? INTERFACE_COMPILE_DEFINITIONS "ASIO_HAS_OPENSSL"
+            INTERFACE_LINK_LIBRARIES
+                "OpenSSL::SSL;OpenSSL::Crypto;Threads::Threads"
+    )
+endif()
