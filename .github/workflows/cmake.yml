@@ -123,7 +123,7 @@ jobs:
       - name: Setup ninja build toolchain
         uses: aminya/setup-cpp@v1
         with:
-          compiler: gcc-15
+          # TODO: compiler: gcc-15
           ninja: true
 
       - name: Install static analyzers

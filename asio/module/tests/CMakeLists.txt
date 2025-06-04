@@ -18,10 +18,10 @@ if(PROJECT_IS_TOP_LEVEL)
     )
         if(
             CMAKE_CXX_COMPILER_ID STREQUAL "Clang"
-            AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 19.0
+            AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 20.0
         )
             set(USE_MODULES TRUE)
-            # see https://releases.llvm.org/19.0.0/projects/libcxx/docs/ReleaseNotes.html
+            # see https://releases.llvm.org/20.0.0/projects/libcxx/docs/ReleaseNotes.html
             # Always use libc++
             add_compile_options(-fexperimental-library)
             add_link_options(-lc++experimental)
@@ -29,7 +29,7 @@ if(PROJECT_IS_TOP_LEVEL)
             add_link_options(-stdlib=libc++)
         elseif(
             CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
-            AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 14.0
+            AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 15.0
         )
             set(USE_MODULES TRUE)
         elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
