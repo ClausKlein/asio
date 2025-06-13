@@ -1,7 +1,9 @@
 module;
 
 #include <asio.hpp>
-#include <asio/ssl.hpp>
+#ifdef ASIO_HAS_OPENSSL
+#  include <asio/ssl.hpp>
+#endif
 
 export module asio;
 
@@ -55,6 +57,7 @@ export using asio::ip::address;
 export using asio::ip::address_v4;
 }  // namespace ip
 
+#ifdef ASIO_HAS_OPENSSL
 namespace ssl
 {
 export using asio::ssl::context;
@@ -72,5 +75,6 @@ export using asio::ssl::error::stream_errors;
 export using asio::ssl::error::make_error_code;
 }  // namespace error
 }  // namespace ssl
+#endif
 
 }  // namespace asio

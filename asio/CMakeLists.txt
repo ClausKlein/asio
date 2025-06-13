@@ -54,6 +54,7 @@ target_sources(
 )
 if(OpenSSL_FOUND)
     target_link_libraries(asio_header INTERFACE OpenSSL::SSL OpenSSL::Crypto)
+    list(APPEND CPPdefinitions ASIO_HAS_OPENSSL)
 endif()
 
 target_compile_definitions(asio_header INTERFACE ${CPPdefinitions})

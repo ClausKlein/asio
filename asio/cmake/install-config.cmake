@@ -34,10 +34,16 @@ endfunction()
 include("${CMAKE_CURRENT_LIST_DIR}/asioTargets.cmake")
 
 if(OpenSSL_FOUND)
+    get_target_property(
+        resultVar
+        asio::asio_header
+        INTERFACE_COMPILE_DEFINITIONS
+    )
+    list(APPEND resultVar ASIO_HAS_OPENSSL)
     set_target_properties(
         asio::asio_header
         PROPERTIES
-            # TODO(CK): how to append? INTERFACE_COMPILE_DEFINITIONS "ASIO_HAS_OPENSSL"
+            INTERFACE_COMPILE_DEFINITIONS ${resultVar}
             INTERFACE_LINK_LIBRARIES
                 "OpenSSL::SSL;OpenSSL::Crypto;Threads::Threads"
     )
