@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.30...4.0)
 
-project(asio-examples VERSION 1.34.0.1 LANGUAGES CXX)
+project(asio-examples VERSION 1.34.2.1 LANGUAGES CXX)
 
 if(PROJECT_IS_TOP_LEVEL)
     find_package(asio ${PROJECT_VERSION} REQUIRED HINTS ../../stagedir)
@@ -12,8 +12,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     add_compile_options(-fexperimental-library)
-    add_link_options(-L$ENV{LLVM_ROOT}/lib/c++ -lc++experimental)
-
+    if(APPLE)
+        add_link_options(-L$ENV{LLVM_ROOT}/lib/c++)
+    endif()
+    add_link_options(-lc++experimental)
+    add_compile_options(-stdlib=libc++)
+    add_link_options(-stdlib=libc++)
     add_executable(timer4 cpp11/tutorial/timer4/timer.cpp)
     target_link_libraries(timer4 PUBLIC asio::asio_header)
 endif()

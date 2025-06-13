@@ -4,7 +4,7 @@ include(cmake/prelude.cmake)
 
 project(
     asio
-    VERSION 1.34.0.1
+    VERSION 1.34.2.1
     DESCRIPTION "Asio C++ Library"
     HOMEPAGE_URL "http://think-async.com/Asio/"
     LANGUAGES CXX
@@ -29,10 +29,12 @@ option(ASIO_SEPARATE_COMPILATION "build asio lib too" ${PROJECT_IS_TOP_LEVEL})
 option(ASIO_BUILD_EXAMPLES "build asio examples too" ${PROJECT_IS_TOP_LEVEL})
 set(CMAKE_DEBUG_POSTFIX D)
 
+include(cmake/cxx-modules-rules.cmake)
+
 # ---- add dependency libraries ----
 
 find_package(Threads REQUIRED)
-find_package(OpenSSL REQUIRED)
+find_package(OpenSSL)
 
 # ---- Declare library ----
 
@@ -50,15 +52,12 @@ target_sources(
     asio_header
     INTERFACE FILE_SET HEADERS BASE_DIRS include FILES ${_asio_implementation}
 )
-target_link_libraries(asio_header INTERFACE OpenSSL::SSL OpenSSL::Crypto)
+if(OpenSSL_FOUND)
+    target_link_libraries(asio_header INTERFACE OpenSSL::SSL OpenSSL::Crypto)
+endif()
 
 target_compile_definitions(asio_header INTERFACE ${CPPdefinitions})
-target_compile_features(
-    asio_header
-    INTERFACE
-        "$<$<COMPILE_FEATURES:cxx_std_23>:cxx_std_23>"
-        "$<$<NOT:$<COMPILE_FEATURES:cxx_std_23>>:cxx_std_20>"
-)
+target_compile_features(asio_header INTERFACE cxx_std_23)
 target_link_libraries(asio_header INTERFACE Threads::Threads)
 
 if(ASIO_SEPARATE_COMPILATION)
@@ -100,12 +99,7 @@ if(ASIO_SEPARATE_COMPILATION)
         PUBLIC ASIO_SEPARATE_COMPILATION ${CPPdefinitions}
     )
     target_link_libraries(asio PUBLIC Threads::Threads)
-    target_compile_features(
-        asio
-        INTERFACE
-            "$<$<COMPILE_FEATURES:cxx_std_23>:cxx_std_23>"
-            "$<$<NOT:$<COMPILE_FEATURES:cxx_std_23>>:cxx_std_20>"
-    )
+    target_compile_features(asio INTERFACE cxx_std_23)
 
     if(ASIO_WARNINGS_AS_ERRORS AND ASIO_DEVELOPER_MODE AND UNIX)
         target_compile_options(asio PUBLIC -Werror)
@@ -123,7 +117,6 @@ endif()
 # ---- Install rules ----
 
 if(NOT CMAKE_SKIP_INSTALL_RULES)
-    include(cmake/AddUninstallTarget.cmake)
     include(cmake/install-rules.cmake)
     configure_file(asio.pc.cmake asio.pc)
     install(
