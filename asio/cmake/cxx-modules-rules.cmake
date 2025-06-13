@@ -14,6 +14,20 @@ if(CMAKE_GENERATOR STREQUAL "Ninja")
         # see https://releases.llvm.org/20.0.0/projects/libcxx/docs/ReleaseNotes.html
         # Always use libc++
         if(APPLE)
+            execute_process(
+                OUTPUT_VARIABLE LLVM_PREFIX
+                COMMAND brew --prefix llvm@20
+                COMMAND_ECHO STDOUT
+            )
+            string(STRIP ${LLVM_PREFIX} LLVM_PREFIX)
+
+            # /usr/local/opt/llvm/share/libc++/v1/std.cppm
+            # or /usr/lib/llvm-20/share/libc++/v1/std.cppm
+            set(LLVM_LIBC_SOURCE ${LLVM_PREFIX}/share/libc++/v1 CACHE PATH "")
+            file(REAL_PATH ${LLVM_PREFIX} LLVM_ROOT)
+            set(LLVM_ROOT ${LLVM_ROOT} CACHE PATH "")
+            message(STATUS "LLVM_ROOT=${LLVM_ROOT}")
+
             add_link_options(-L$ENV{LLVM_ROOT}/lib/c++)
         endif()
         add_compile_options(-fexperimental-library)
