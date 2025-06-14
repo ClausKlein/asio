@@ -18,8 +18,23 @@ set(_package asio)
 
 #NO! install(DIRECTORY include/ DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}" COMPONENT asio_Development)
 
+# Allow package maintainers to freely override the path for the configs
+set(ASIO_INSTALL_CMAKEDIR
+    "${CMAKE_INSTALL_LIBDIR}/cmake/${_package}"
+    CACHE PATH
+    "CMake package config location relative to the install prefix"
+)
+mark_as_advanced(ASIO_INSTALL_CMAKEDIR)
+
 if(TARGET asio_header)
     install(TARGETS asio_header EXPORT asioTargets FILE_SET HEADERS)
+endif()
+if(TARGET asio_module)
+    install(
+        TARGETS asio_module
+        EXPORT asioTargets
+        FILE_SET CXX_MODULES DESTINATION ${ASIO_INSTALL_CMAKEDIR}
+    )
 endif()
 if(TARGET asio)
     install(TARGETS asio EXPORT asioTargets FILE_SET public_headers)
@@ -30,14 +45,6 @@ write_basic_package_version_file(
     COMPATIBILITY SameMajorVersion
     ARCH_INDEPENDENT
 )
-
-# Allow package maintainers to freely override the path for the configs
-set(ASIO_INSTALL_CMAKEDIR
-    "${CMAKE_INSTALL_LIBDIR}/cmake/${_package}"
-    CACHE PATH
-    "CMake package config location relative to the install prefix"
-)
-mark_as_advanced(ASIO_INSTALL_CMAKEDIR)
 
 configure_file(cmake/install-config.cmake install-config.cmake @ONLY)
 install(
@@ -58,6 +65,8 @@ install(
     NAMESPACE asio::
     DESTINATION "${ASIO_INSTALL_CMAKEDIR}"
     COMPONENT asio_Development
+    CXX_MODULES_DIRECTORY
+    .
 )
 
 if(PROJECT_IS_TOP_LEVEL)

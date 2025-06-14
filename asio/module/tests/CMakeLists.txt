@@ -9,10 +9,10 @@ if(PROJECT_IS_TOP_LEVEL)
 
     include(../../cmake/cxx-modules-rules.cmake)
 
-    if(ASIO_USE_MODULES)
-        # Build the asio module
-        add_asio_module(asio_module)
-    endif()
+    # if(ASIO_USE_MODULES)
+    #     # Build the asio module
+    #     add_asio_module(asio_module)
+    # endif()
 endif()
 
 # list(APPEND ALL_EXAMPLES module/tests/main.cpp)
@@ -23,8 +23,8 @@ message(STATUS "Module tests to be built: ${ALL_EXAMPLES}")
 foreach(example ${ALL_EXAMPLES})
     add_executable(${example})
     target_sources(${example} PRIVATE ${example}.cpp)
-    if(TARGET asio_module)
-        target_link_libraries(${example} asio_module)
+    if(TARGET asio::asio_module)
+        target_link_libraries(${example} asio::asio_module)
         target_compile_definitions(${example} PUBLIC USE_MODULES)
     else()
         target_link_libraries(${example} asio::asio_header)

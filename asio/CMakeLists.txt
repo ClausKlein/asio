@@ -100,7 +100,7 @@ if(ASIO_SEPARATE_COMPILATION)
         PUBLIC ASIO_SEPARATE_COMPILATION ${CPPdefinitions}
     )
     target_link_libraries(asio PUBLIC Threads::Threads)
-    target_compile_features(asio INTERFACE cxx_std_23)
+    target_compile_features(asio PUBLIC cxx_std_23)
 
     if(ASIO_WARNINGS_AS_ERRORS AND ASIO_DEVELOPER_MODE AND UNIX)
         target_compile_options(asio PUBLIC -Werror)
@@ -109,6 +109,18 @@ if(ASIO_SEPARATE_COMPILATION)
     if(OpenSSL_FOUND)
         target_link_libraries(asio PUBLIC OpenSSL::SSL OpenSSL::Crypto)
     endif()
+endif()
+
+if(ASIO_USE_MODULES)
+    add_library(asio_module)
+    add_library(asio::asio_module ALIAS asio_module)
+    target_compile_features(asio_module PUBLIC cxx_std_23)
+    target_sources(
+        asio_module
+        PUBLIC FILE_SET CXX_MODULES FILES module/asio.cppm
+    )
+    target_link_libraries(asio_module PUBLIC asio_header)
+    target_compile_definitions(asio_module PUBLIC ${CPPdefinitions})
 endif()
 
 if(ASIO_BUILD_EXAMPLES)
