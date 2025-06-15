@@ -28,7 +28,7 @@ if(CMAKE_GENERATOR STREQUAL "Ninja")
             set(LLVM_ROOT ${LLVM_ROOT} CACHE PATH "")
             message(STATUS "LLVM_ROOT=${LLVM_ROOT}")
 
-            add_link_options(-L$ENV{LLVM_ROOT}/lib/c++)
+            add_link_options(-L${LLVM_ROOT}/lib/c++)
         endif()
         add_compile_options(-fexperimental-library)
         add_link_options(-lc++experimental)

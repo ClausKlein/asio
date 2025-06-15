@@ -27,6 +27,11 @@ endif()
 
 option(ASIO_SEPARATE_COMPILATION "build asio lib too" ${PROJECT_IS_TOP_LEVEL})
 option(ASIO_BUILD_EXAMPLES "build asio examples too" ${PROJECT_IS_TOP_LEVEL})
+
+set(CMAKE_SKIP_TEST_ALL_DEPENDENCY OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
 set(CMAKE_DEBUG_POSTFIX D)
 
 include(cmake/cxx-modules-rules.cmake)
