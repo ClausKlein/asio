@@ -18,7 +18,11 @@ if(PROJECT_IS_TOP_LEVEL)
     check_cxx_symbol_exists(sprintf_s cstdio ASIO_HAS_SECURE_RTL)
 endif()
 
-set(CPPdefinitions ASIO_NO_DEPRECATED ASIO_DISABLE_BOOST_CONTEXT_FIBER)
+set(CPPdefinitions
+    -DASIO_INLINE_VARIABLE=inline
+    ASIO_NO_DEPRECATED
+    ASIO_DISABLE_BOOST_CONTEXT_FIBER
+)
 if(ASIO_HAS_SECURE_RTL)
     list(APPEND CPPdefinitions ASIO_HAS_SECURE_RTL)
 elseif(ASIO_HAS_SNPRINTF)
