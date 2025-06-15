@@ -123,7 +123,7 @@ jobs:
       - name: Setup ninja build toolchain
         uses: aminya/setup-cpp@v1
         with:
-          # TODO: compiler: gcc-15
+          compiler: gcc
           ninja: true
 
       - name: Install static analyzers
@@ -147,6 +147,7 @@ jobs:
 
       # see https://github.com/mathstuf/cxx-modules-sandbox/blob/master/.github/workflows/cmake.yml
       - name: Visual Studio toolchain environment
+        if: matrix.os == 'windows-2022'
         uses: TheMrMilchmann/setup-msvc-dev@v1
         with:
           arch: x64
