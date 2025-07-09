@@ -1,6 +1,10 @@
-cmake_minimum_required(VERSION 3.30...4.0)
+cmake_minimum_required(VERSION 3.30...4.1)
 
 include(cmake/prelude.cmake)
+
+if($ENV{CXX} MATCHES "clang" OR CMAKE_CXX_COMPILER MATCHES "clang")
+    set(ENV{CXXFLAGS} -stdlib=libc++)
+endif()
 
 project(
     asio
@@ -99,9 +103,9 @@ if(ASIO_SEPARATE_COMPILATION)
         asio
         PUBLIC
             FILE_SET public_headers
-            TYPE HEADERS
-            BASE_DIRS include
-            FILES ${_public_headers}
+                TYPE HEADERS
+                BASE_DIRS include
+                FILES ${_public_headers}
     )
 
     target_compile_definitions(

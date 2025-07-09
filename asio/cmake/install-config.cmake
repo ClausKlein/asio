@@ -21,9 +21,9 @@ function(add_asio_module NAME)
         ${NAME}
         PUBLIC
             FILE_SET modules_public
-            TYPE CXX_MODULES
-            BASE_DIRS ${ASIO_ROOT}
-            FILES ${ASIO_ROOT}/lib/cmake/asio/module/asio.cppm
+                TYPE CXX_MODULES
+                BASE_DIRS ${ASIO_ROOT}
+                FILES ${ASIO_ROOT}/lib/cmake/asio/module/asio.cppm
     )
     # cmake-format: on
     if(OpenSSL_FOUND)

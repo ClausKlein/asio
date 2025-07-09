@@ -32,8 +32,6 @@ if(CMAKE_GENERATOR STREQUAL "Ninja")
         endif()
         add_compile_options(-fexperimental-library)
         add_link_options(-lc++experimental)
-        add_compile_options(-stdlib=libc++)
-        add_link_options(-stdlib=libc++)
     elseif(
         CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
         AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 15.0
