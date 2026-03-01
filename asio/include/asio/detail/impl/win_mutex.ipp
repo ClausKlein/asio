@@ -52,7 +52,7 @@ int win_mutex::do_init()
 # endif
   return 0;
 #else
-  __try
+  try
   {
 # if defined(UNDER_CE)
     ::InitializeCriticalSection(&crit_section_);
@@ -64,8 +64,7 @@ int win_mutex::do_init()
       return ::GetLastError();
 # endif
   }
-  __except(GetExceptionCode() == STATUS_NO_MEMORY
-      ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
+  catch (const std::bad_alloc&)
   {
     return ERROR_OUTOFMEMORY;
   }
