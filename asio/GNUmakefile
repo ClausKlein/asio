@@ -8,7 +8,7 @@ MAKEFLAGS+= --warn-undefined-variables
 
 export hostSystemName=$(shell uname)
 
-.PHONY: all check test clean distclean
+.PHONY: all check test format clean distclean
 all: .init
 	cmake --workflow --preset dev --fresh
 
@@ -31,20 +31,23 @@ test:
 
 .init: requirements.txt .CMakeUserPresets.json
 	perl -p -e 's/<hostSystemName>/${hostSystemName}/;' .CMakeUserPresets.json > CMakeUserPresets.json
-	-pip3 install --user --upgrade -r requirements.txt
+	-pip3 install --upgrade -r requirements.txt
 	touch .init
+
+# format:
+# 	git ls-files ::*CMakeList.txt ::*.cmake ::*.cmake.in | xargs gersemi -i
 
 clean:
 	rm -rf build
 
 distclean: clean
-	rm -rf stagedir .init tags *.bak
+	rm -rf stagedir .init tags *.bak CMakeUserPresets.json
 
 GNUmakefile :: ;
 *.txt :: ;
 *.json :: ;
 
 # Anything we don't know how to build will use this rule.
-# The command is a do-nothing command.
 #
-% :: ;
+% ::
+	ninja -C build/dev $@
