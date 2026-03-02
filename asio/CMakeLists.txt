@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 3.23...3.29)
+cmake_minimum_required(VERSION 3.23...4.2.3)
 
 include(cmake/prelude.cmake)
 
 project(asio
-        VERSION 1.29.0
+        VERSION 1.36.0
         DESCRIPTION "Asio C++ Library"
         HOMEPAGE_URL "http://think-async.com/Asio/"
         LANGUAGES CXX
@@ -45,11 +45,11 @@ target_compile_features(asio_header INTERFACE cxx_std_17)
 target_link_libraries(asio_header INTERFACE Threads::Threads)
 
 if(ASIO_SEPARATE_COMPILATION)
-  #XXX find_package(OpenSSL)
+  find_package(OpenSSL)
   set(libasio_SOURCES src/asio.cpp)
 
   if(OpenSSL_FOUND)
-    #XXX set(libasio_SOURCES ${libasio_SOURCES} src/asio_ssl.cpp)
+    set(libasio_SOURCES ${libasio_SOURCES} src/asio_ssl.cpp)
   endif()
 
   set(CMAKE_VERIFY_INTERFACE_HEADER_SETS ${PROJECT_IS_TOP_LEVEL})

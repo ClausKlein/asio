@@ -25,7 +25,7 @@ test:
 	cmake --preset ci-${hostSystemName}
 	cmake --build build
 	cmake --install build --prefix $(CURDIR)/stagedir
-	cmake -G Ninja -B build/tests -S src/tests -D CMAKE_PREFIX_PATH=$(CURDIR)/stagedir/usr/local
+	cmake -G Ninja -B build/tests -S src/tests -D CMAKE_PREFIX_PATH=$(CURDIR)/stagedir
 	cmake --build build/tests
 	ctest --test-dir build/tests
 
