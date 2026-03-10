@@ -16,7 +16,7 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
-#include <string>
+#include "asio/detail/std/string.hpp"
 #include "asio/detail/socket_types.hpp"
 #include "asio/detail/winsock_init.hpp"
 #include "asio/error_code.hpp"
@@ -59,13 +59,13 @@ public:
   // Get the underlying endpoint in the native type.
   asio::detail::socket_addr_type* data() noexcept
   {
-    return &data_.base[0];
+    return &data_.base;
   }
 
   // Get the underlying endpoint in the native type.
   const asio::detail::socket_addr_type* data() const noexcept
   {
-    return &data_.base[0];
+    return &data_.base;
   }
 
   // Get the underlying size of the endpoint in the native type.
@@ -110,7 +110,7 @@ public:
   // Determine whether the endpoint is IPv4.
   bool is_v4() const noexcept
   {
-    return data_.base[0].sa_family == ASIO_OS_DEF(AF_INET);
+    return data_.base.sa_family == ASIO_OS_DEF(AF_INET);
   }
 
 #if !defined(ASIO_NO_IOSTREAM)
@@ -122,11 +122,7 @@ private:
   // The underlying IP socket address.
   union data_union
   {
-#if defined(_FORTIFY_SOURCE)
-    asio::detail::socket_addr_type base[8];
-#else // defined(_FORTIFY_SOURCE)
-    asio::detail::socket_addr_type base[1];
-#endif // defined(_FORTIFY_SOURCE)
+    asio::detail::socket_addr_type base;
     asio::detail::sockaddr_in4_type v4;
     asio::detail::sockaddr_in6_type v6;
   } data_;

@@ -13,7 +13,7 @@
 #define ASIO_EXPERIMENTAL_DETAIL_CORO_PROMISE_ALLOCATOR_HPP
 
 #include "asio/detail/config.hpp"
-#include <limits>
+#include "asio/detail/std/limits.hpp"
 #include "asio/experimental/coro_traits.hpp"
 
 namespace asio {
@@ -62,7 +62,7 @@ void deallocate_coroutine(void* raw_, const std::size_t size)
 template <typename T>
 constexpr std::size_t variadic_first(std::size_t = 0u)
 {
-  return std::numeric_limits<std::size_t>::max();
+  return (std::numeric_limits<std::size_t>::max)();
 }
 
 template <typename T, typename First, typename... Args>

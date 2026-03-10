@@ -16,7 +16,7 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
-#include <exception>
+#include "asio/detail/std/exception.hpp"
 #include "asio/detail/push_options.hpp"
 
 namespace asio {
@@ -31,7 +31,15 @@ public:
   ASIO_DECL bad_executor() noexcept;
 
   /// Obtain message associated with exception.
-  ASIO_DECL virtual const char* what() const noexcept;
+  ASIO_DECL virtual const char* what() const
+    ASIO_NOEXCEPT_OR_NOTHROW
+#ifdef ASIO_MODULE
+    {
+      return "bad executor";
+    }
+#else
+    ;
+#endif
 };
 
 } // namespace execution

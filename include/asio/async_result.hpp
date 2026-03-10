@@ -378,6 +378,9 @@ private:
  *
  * In general, implementers of asynchronous operations should use the
  * async_initiate function rather than using the async_result trait directly.
+ *
+ * For a more detailed discussion of the role of async_result and
+ * async_initiate, see the overview documentation for @ref completion_token.
  */
 template <typename CompletionToken,
     ASIO_COMPLETION_SIGNATURE... Signatures>
@@ -451,8 +454,8 @@ class async_result<void, Signatures...>
 
 #endif // defined(GENERATING_DOCUMENTATION)
 
-/// Helper template to deduce the handler type from a CompletionToken, capture
-/// a local copy of the handler, and then create an async_result for the
+/// (Legacy.) Helper template to deduce the handler type from a CompletionToken,
+/// capture a local copy of the handler, and then create an async_result for the
 /// handler.
 template <typename CompletionToken,
     ASIO_COMPLETION_SIGNATURE... Signatures>
@@ -487,39 +490,17 @@ struct async_completion
 
 namespace detail {
 
-struct async_result_memfns_base
-{
-  void initiate();
-};
-
-template <typename T>
-struct async_result_memfns_derived
-  : T, async_result_memfns_base
-{
-};
-
-template <typename T, T>
-struct async_result_memfns_check
-{
-};
-
-template <typename>
-char (&async_result_initiate_memfn_helper(...))[2];
-
-template <typename T>
-char async_result_initiate_memfn_helper(
-    async_result_memfns_check<
-      void (async_result_memfns_base::*)(),
-      &async_result_memfns_derived<T>::initiate>*);
+template <typename CompletionToken, ASIO_COMPLETION_SIGNATURE... Signatures>
+constexpr inline bool async_result_has_initiate_memfn_v =
+  requires(async_result<decay_t<CompletionToken>, Signatures...> ar){
+    { ar.initate() };
+  };
 
 template <typename CompletionToken,
     ASIO_COMPLETION_SIGNATURE... Signatures>
 struct async_result_has_initiate_memfn
-  : integral_constant<bool, sizeof(async_result_initiate_memfn_helper<
-      async_result<decay_t<CompletionToken>, Signatures...>
-    >(0)) != 1>
-{
-};
+  : integral_constant<bool, !async_result_has_initiate_memfn_v<CompletionToken, Signatures...>>
+{};
 
 } // namespace detail
 
@@ -620,6 +601,36 @@ struct async_result_has_initiate_memfn
 
 #if defined(GENERATING_DOCUMENTATION)
 
+/// Helper function for implementing an asynchronous operation's initiating
+/// function.
+/**
+ * The async_initiate function wraps the async_result trait. It automatically
+ * performs the necessary decay and forward of the completion token, and also
+ * enables backwards compatibility with legacy completion token implementations.
+ *
+ * @param initiation A function object that will be called to launch the
+ * asynchronous operation. It receives the concrete completion handler as its
+ * first argument, followed by any additional arguments passed to
+ * async_initiate.
+ *
+ * @param token The @ref completion_token provided by the user. This will be
+ * transformed into a concrete completion handler by the async_result trait.
+ *
+ * @param args Additional arguments to be forwarded to the initiation function
+ * object.
+ *
+ * @returns The return value is determined by the async_result specialisation
+ * for the completion token type. For callback-based tokens, returns @c void.
+ * For other tokens such as use_future or use_awaitable, returns the
+ * corresponding future or awaitable type.
+ *
+ * @note Asynchronous operation implementations should use this function rather
+ * than directly using the async_result trait, or the legacy async_completion
+ * helper template.
+ *
+ * For a more detailed discussion of the role of async_result and
+ * async_initiate, see the overview documentation for @ref completion_token.
+ */
 template <typename CompletionToken,
     completion_signature... Signatures,
     typename Initiation, typename... Args>

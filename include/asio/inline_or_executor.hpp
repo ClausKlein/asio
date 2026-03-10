@@ -16,6 +16,9 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
+#if !defined(ASIO_NO_EXCEPTIONS)
+# include "asio/detail/std/exception.hpp" // use std::terminate();
+#endif
 #include "asio/detail/non_const_lvalue.hpp"
 #include "asio/detail/type_traits.hpp"
 #include "asio/execution/blocking.hpp"
@@ -30,10 +33,11 @@ namespace asio {
 
 /// Adapts an executor to add inline invocation of the submitted function.
 /**
- * The @inline_or_executor class template adapts an existing executor such that:
+ * The @c inline_or_executor class template adapts an existing executor such
+ * that:
  *
  * @li posted function objects (or when the @c blocking property is set to
- *     @c blocking.never) are submitted to the wrapped executor; and
+ * @c blocking.never) are submitted to the wrapped executor; and
  *
  * @li dispatched function objects (or when @c blocking is @c blocking.always or
  * @c blocking.possibly) are executed inline.

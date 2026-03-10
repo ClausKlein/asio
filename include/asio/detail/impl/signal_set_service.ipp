@@ -17,8 +17,8 @@
 
 #include "asio/detail/config.hpp"
 
-#include <cstring>
-#include <stdexcept>
+#include "asio/detail/std/cstring.hpp"
+#include "asio/detail/std/stdexcept.hpp"
 #include "asio/detail/signal_blocker.hpp"
 #include "asio/detail/signal_set_service.hpp"
 #include "asio/detail/static_mutex.hpp"
@@ -67,7 +67,7 @@ signal_state* get_signal_state()
   return &state;
 }
 
-void asio_signal_handler(int signal_number)
+extern "C" void asio_signal_handler(int signal_number)
 {
 #if defined(ASIO_WINDOWS) \
   || defined(ASIO_WINDOWS_RUNTIME) \
