@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 3.23...4.2.3)
+cmake_minimum_required(VERSION 3.20...4.3)
 
 include(cmake/prelude.cmake)
 
 project(asio
-        VERSION 1.36.0
+        VERSION 1.38.0
         DESCRIPTION "Asio C++ Library"
         HOMEPAGE_URL "http://think-async.com/Asio/"
         LANGUAGES CXX

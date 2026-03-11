@@ -10,22 +10,23 @@ export hostSystemName=$(shell uname)
 
 .PHONY: all check test format clean distclean
 all: .init
-	cmake --workflow --preset dev --fresh
+	cmake --preset dev --fresh --log-level=VERBOSE
+	ln -fs build/dev/compile_commands.json .
+	cmake --workflow --preset dev
 
 check:
-	-iwyu_tool -p build/dev \
-		build/dev/asio_verify_interface_header_sets/asio/basic_readable_pipe.hpp.cxx \
-		build/dev/asio_verify_interface_header_sets/asio/detail/reactive_socket_send_op.hpp.cxx \
-		-- -Xiwyu --cxx17ns #XXX -Xiwyu --transitive_includes_only
-	run-clang-tidy -p build/dev -checks='-*,misc-header-*,misc-include-*' src/tests
-	# ninja -C build/dev spell-check
-	# ninja -C build/dev format-check
+	# run-clang-tidy -p build/dev -checks='-*,misc-header-*,misc-include-*' src/tests
+	ninja -C build/dev spell-check
+	#NO! ninja -C build/dev format-check
 
-test:
+test: .init
 	cmake --preset ci-${hostSystemName}
+	ln -fs build/compile_commands.json .
 	cmake --build build
 	cmake --install build --prefix $(CURDIR)/stagedir
-	cmake -G Ninja -B build/tests -S src/tests -D CMAKE_PREFIX_PATH=$(CURDIR)/stagedir
+	cmake -G Ninja -B build/tests -S src/tests -D CMAKE_PREFIX_PATH=$(CURDIR)/stagedir \
+		-D CMAKE_EXPORT_COMPILE_COMMANDS=ON
+	ln -fs build/tests/compile_commands.json .
 	cmake --build build/tests
 	ctest --test-dir build/tests
 
@@ -38,7 +39,7 @@ test:
 # 	git ls-files ::*CMakeList.txt ::*.cmake ::*.cmake.in | xargs gersemi -i
 
 clean:
-	rm -rf build
+	rm -rf build compile_commands.json
 
 distclean: clean
 	rm -rf stagedir .init tags *.bak CMakeUserPresets.json

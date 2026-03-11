@@ -26,7 +26,7 @@
       "hidden": true,
       "inherits": "cmake-pedantic",
       "cacheVariables": {
-        "asio_DEVELOPER_MODE": "ON"
+        "asio_DEVELOPER_MODE": true
       }
     },
     {
@@ -49,9 +49,12 @@
           "This preset makes sure the project actually builds with at least the specified standard",
       "hidden": true,
       "cacheVariables": {
-        "CMAKE_CXX_EXTENSIONS": "OFF",
+        "CMAKE_CXX_EXTENSIONS": false,
         "CMAKE_CXX_STANDARD": "17",
-        "CMAKE_CXX_STANDARD_REQUIRED": "ON"
+        "CMAKE_CXX_STANDARD_REQUIRED": true,
+        "CMAKE_EXPORT_COMPILE_COMMANDS": true,
+        "CMAKE_INSTALL_MESSAGE": "LAZY",
+        "CMAKE_SKIP_TEST_ALL_DEPENDENCY": false
       }
     },
     {
@@ -140,7 +143,7 @@
       "inherits": "gen-Linux",
       "hidden": true,
       "cacheVariables": {
-        "ENABLE_COVERAGE": "ON",
+        "ENABLE_COVERAGE": true,
         "CMAKE_BUILD_TYPE": "Coverage",
         "CMAKE_CONFIGURATION_TYPES": "Coverage;Release;Debug",
         "CMAKE_CXX_FLAGS_COVERAGE":

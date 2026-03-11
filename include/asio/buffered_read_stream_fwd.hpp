@@ -15,6 +15,8 @@
 # pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
+#include "asio/detail/config.hpp"
+
 namespace asio {
 ASIO_INLINE_NAMESPACE_BEGIN
 

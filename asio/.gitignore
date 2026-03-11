@@ -28,8 +28,10 @@ test-driver
 .idea/
 .vs/
 .vscode/
+.cache/
 .init
 build/
+compile_commands.json
 cmake-build-*/
 stagedir/
 prefix/
