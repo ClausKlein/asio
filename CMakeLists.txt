@@ -1,4 +1,7 @@
-cmake_minimum_required(VERSION 3.26)
+#
+# USAGE: CXX=clang++ cmake -S . -B build --fresh -D CMAKE_CXX_STANDARD=20
+#
+cmake_minimum_required(VERSION 3.26...4.3)
 
 if (CMAKE_CXX_STANDARD LESS 20)
   message(FATAL_ERROR "At least C++20 required but have ${CMAKE_CXX_STANDARD}")
