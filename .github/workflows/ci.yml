@@ -3,6 +3,7 @@ name: asio CI
 on:
   push:
     branches: [ master, citest-* ]
+  workflow_dispatch:
 
 jobs:
   build:
