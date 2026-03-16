@@ -2,7 +2,8 @@ name: asio CI
 
 on:
   push:
-    branches: [ master, citest-* ]
+    branches: [ master, citest-*, feature/module* ]
+  workflow_dispatch:
 
 jobs:
   build:
